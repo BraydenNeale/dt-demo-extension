@@ -74,7 +74,7 @@ class FileStatsDemo(BasePlugin):
         # Server
         server_metrics = {}
         server_metrics['cpu'] = json_data.get('cpu')
-        server_metrics['temperature']: json_data.get('temperature')
+        server_metrics['temperature'] = json_data.get('temperature')
         
         total_memory = int(json_data.get('totalMem', 0))
         used_memory = int(json_data.get('memUsed', 0))

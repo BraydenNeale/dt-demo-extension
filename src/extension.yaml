@@ -8,8 +8,249 @@ author:
 
 # alerts
 
-# metrics
+# METRIC DEFINITONS AND METADATA FOR OUR MINT METRICS:
+# demo.file.stats.cpu,server.id="hostname1",group="test" 45
+# demo.file.stats.temperature,server.id="hostname1",group="test" 60
+# demo.file.stats.memory,server.id="hostname1",group="test" 85.0
+# demo.file.stats.disk.used,server.id="hostname1",group="test",disk.drive="C" 85.0
+# demo.file.stats.disk.used,server.id="hostname1",group="test",disk.drive="D" 85.0
+# demo.file.stats.process.status,server.id="hostname1",group="test",process.name="gateway",process.status="active" 1
+# demo.file.stats.process.status,server.id="hostname1",group="test",process.name="database",process.status="down" 0
+metrics:
+# SERVER
+- key: demo.file.stats.cpu
+  metadata:
+    displayName: Server CPU Usage
+    description: server cpu
+    unit: Percent
+    tags:
+    - "Demo"
+    - "file stats server"
+    - "extension"
+- key: demo.file.stats.temperature
+  metadata:
+    displayName: Server Temperature
+    description: server temperature
+    unit: Count
+    tags:
+    - "Demo"
+    - "file stats server"
+    - "extension"
+- key: demo.file.stats.memory
+  metadata:
+    displayName: Server Memory Usage
+    description: server memory
+    unit: Percent
+    tags:
+    - "Demo"
+    - "file stats server"
+    - "extension"
+# DISK
+- key: demo.file.stats.disk.used
+  metadata:
+    displayName: Disk Usage
+    description: disk used %
+    unit: Percent
+    tags:
+    - "Demo"
+    - "file stats disk"
+    - "extension"
+# PROCESS
+- key: demo.file.stats.process.status
+  metadata:
+    displayName: Process Status
+    description: process status
+    unit: Count
+    tags:
+    - "Demo"
+    - "file stats process"
+    - "extension"
 
 # datasource
 
-# topology
+topology:
+  # CUSTOM TOPOLOGY TYPES: https://www.dynatrace.com/support/help/shortlink/custom-topology
+  # WRAPS: Settings -> Topology model -> Generic Types
+  # You can view the Unified Analaysis Screens for your custom types under: https://<DYNATRACE_TENANT>.com/ui/entity/list/<ENTITY_ID>
+  # e.g. https://<DYNATRACE_TENANT>.com/ui/entity/list/python:custom_file_stat_server
+  types:
+  # SERVER
+  - name: python:custom_file_stat_server
+    enabled: true
+    displayName: File Stat Server
+    rules:
+    - idPattern: file_stats_server_{server.id}
+      instanceNamePattern: Server {server.id}
+      sources:
+      - sourceType: Metrics
+        condition: $prefix(demo.file.stats)
+      attributes:
+        - key: server_id
+          pattern: '{server.id}'
+          displayName: Server ID
+  # DISK
+  - name: python:custom_file_stat_disk
+    enabled: true
+    displayName: File Stat Disk
+    rules:
+    - idPattern: file_stats_disk_{server.id}_{disk.drive}
+      instanceNamePattern: Disk {disk.drive} on {server.id}
+      sources:
+      - sourceType: Metrics
+        condition: $prefix(demo.file.stats)
+      attributes:
+        - key: server_id
+          pattern: '{server.id}'
+          displayName: Server ID
+        - key: disk_drive
+          pattern: '{disk.drive}'
+          displayName: Server ID
+  # PROCESS
+  - name: python:custom_file_stat_process
+    enabled: true
+    displayName: File Stat Process
+    rules:
+    - idPattern: file_stats_process_{server.id}_{process.name}
+      instanceNamePattern: Process {process.name} on {server.id}
+      sources:
+      - sourceType: Metrics
+        condition: $prefix(demo.file.stats)
+      attributes:
+        - key: server_id
+          pattern: '{server.id}'
+          displayName: Server ID
+        - key: process_name
+          pattern: '{process.name}'
+          displayName: Process Name
+  # CUSTOM TOPOOLOGY RELATIONSHIPS
+  # WRAPS: Settings -> Topology model -> Generic Types
+  # Possible relationship mapping types include CALLS, CHILD_OF, INSTANCE_OF, PART_OF, SAME_AS and RUNS_ON.
+  relationships:
+  # Disk is child of server
+  - enabled: true
+    fromType: python:custom_file_stat_disk
+    typeOfRelation: CHILD_OF
+    toType: python:custom_file_stat_server
+    sources:
+    - sourceType: Metrics
+      condition: $prefix(demo.file.stats.disk)
+  # Process runs on server
+  - enabled: true
+    fromType: python:custom_file_stat_process
+    typeOfRelation: RUNS_ON
+    toType: python:custom_file_stat_server
+    sources:
+    - sourceType: Metrics
+      condition: $prefix(demo.file.stats.process)
+  # Server = OneAgent host if the ID's match
+  - enabled: true
+    fromType: host
+    typeOfRelation: SAME_AS
+    toType: python:custom_file_stat_server
+    sources:
+    - sourceType: Entities
+      mappingRules:
+        - sourceProperty: dt.entity.host
+          sourceTransformation: To lower case
+          destinationProperty: dt.entity.host
+          destinationTransformation: To lower case
+
+# Build and define custom Unified analysis screens
+# https://www.dynatrace.com/support/help/shortlink/ua-pages
+screens:
+ # Host card injection - Show the custom server data
+ # Extend built-in Host page: https://www.dynatrace.com/support/help/shortlink/extend-ua-pages
+  - entityType: HOST
+    detailsInjections:
+    - type: ENTITIES_LIST
+      key: file_stat_servers
+      conditions:
+      - relatedEntity|entitySelectorTemplate=type(python:custom_file_stat_server),toRelationship.same_as($(entityConditions))
+    entitiesListCards:
+    - key: file_stat_servers
+      displayName: Server File Stats
+      description: Extension server metrics via stats file
+      pageSize: 10
+      displayCharts: false
+      displayIcons: true
+      enableDetailsExpandability: true
+      numberOfVisibleCharts: 3
+      entitySelectorTemplate: type(python:custom_file_stat_server),toRelationship.same_as($(entityConditions))
+  # CUSTOM UFA SCREENS
+  # FILE STAT SERVER - Entity lists and metrics
+  - entityType: python:custom_file_stat_server
+    detailsSettings:
+      staticContent:
+        breadcrumbs:
+          - type: ENTITY_LIST_REF
+            entityType: python:custom_file_stat_server
+            displayName: File Stat Servers
+        showProblems: true
+        showProperties: true
+        showTags: true
+        showGlobalFilter: true
+        showAddTag: true
+      layout:
+        autoGenerate: false
+        cards:
+        - key: file_stat_disks
+          type: ENTITIES_LIST
+        - key: file_stat_processes
+          type: ENTITIES_LIST
+        - key: server_charts
+          type: CHART_GROUP
+    entitiesListCards:
+    - key: file_stat_disks
+      displayName: Disks
+      pageSize: 10
+      displayCharts: false
+      enableDetailsExpandability: false
+      numberOfVisibleCharts: 3
+      displayIcons: true
+      entitySelectorTemplate: type(python:custom_file_stat_disk),fromRelationship.isChildOf($(entityConditions))
+    - key: file_stat_processes
+      displayName: Databases
+      pageSize: 10
+      displayCharts: false
+      enableDetailsExpandability: false
+      numberOfVisibleCharts: 3
+      displayIcons: true
+      entitySelectorTemplate: type(demo.file.stats.process),fromRelationship.runsOn($(entityConditions))
+    chartsCards:
+    - key: server_charts
+      displayName: Reporting Server Metrics
+      chartsInRow: 3
+      numberOfVisibleCharts: 3
+      charts:
+      - displayName: CPU Usage
+        visualizationType: GRAPH_CHART
+        graphChartConfig:
+          metrics:
+            - metricSelector: demo.file.stats.cpu:splitBy("dt.entity.python:custom_file_stat_server")
+      - displayName: Memory Usage
+        visualizationType: GRAPH_CHART
+        graphChartConfig:
+          metrics:
+            - metricSelector: demo.file.stats.memory:splitBy("dt.entity.python:custom_file_stat_server")
+      - displayName: Temperatur
+        visualizationType: GRAPH_CHART
+        graphChartConfig:
+          metrics:
+            - metricSelector: demo.file.stats.temperature:splitBy("dt.entity.python:custom_file_stat_server")
+# DISK - breadcrumb + autogen
+# Leave disk as default OOTB
+# PROCESS - breadcrumb + autogen
+  - entityType: python:custom_file_stat_process
+    detailsSettings:
+      staticContent:
+        breadcrumbs:
+          - type: ENTITY_LIST_REF
+            entityType: python:custom_file_stat_process
+            displayName: File Stat Processes
+        showProblems: true
+        showProperties: true
+        showTags: true
+        showGlobalFilter: true
+        showAddTag: true
+      layout:
+        autoGenerate: true
