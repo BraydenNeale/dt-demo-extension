@@ -1,0 +1,13 @@
+{
+    "entries": [
+      {
+        "group_name": "python",
+        "processes": [
+          {
+            "process_name": "python"
+          }
+        ],
+         "properties": {"Technologies": "PYTHON"}
+      }
+    ]
+  }

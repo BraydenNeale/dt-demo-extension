@@ -1,0 +1,8 @@
+{
+    "file_name": "./stats.json",
+    "group": "test",
+    "password": "password",
+    "debug": true,
+    "dynatrace_tenant": "https://<TENANT>.dynatrace.com/",
+    "dynatrace_token": "dt0c01..."
+}

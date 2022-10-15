@@ -1,0 +1,71 @@
+{
+    "name": "custom.python.file_stat_demo",
+    "version": "0.0.1",
+    "productiveMinVersion": "1.000",
+    "requiredAgentVersion": "1.000",
+    "type": "python",
+    "entity": "HOST",
+    "metricGroup": "demo.file.stats",
+    "technologies": [],
+    "favicon": "https://assets.dynatrace.com/global/icons/infographic_rack.png",
+    "source": {
+      "package": "file_stat_demo",
+      "className": "FileStatsDemo",
+      "install_requires": ["requests==2.28.1"],
+      "activation": "Singleton"
+    },
+    "metrics": [],
+    "dashboards": [],
+    "ui": {},
+    "properties": [
+      {
+        "key": "file_name",
+        "type": "String"
+      },
+      {
+        "key": "group",
+        "type": "String"
+      },
+      {
+        "key": "example_password",
+        "type": "password"
+      },
+      {
+        "key": "debug",
+        "type": "Boolean",
+        "defaultValue": false
+      }
+    ],
+    "configUI": {
+      "displayName": "File Stats Demo",
+      "properties": [
+        {
+          "key": "file_name",
+          "displayName": "File Name",
+          "displayOrder": 1,
+          "displayHint": "Filepath to the json data file",
+          "defaultValue": "C:/temp/stats.json"
+        },
+        {
+          "key": "group",
+          "displayName": "Group",
+          "displayOrder": 2,
+          "displayHint": "Logical group name",
+          "defaultValue": "dev"
+        },
+        {
+          "key": "example_password",
+          "displayName": "Password",
+          "displayOrder": 3,
+          "displayHint": "password auth if required...",
+          "defaultValue": ""
+        },
+        {
+          "key": "debug",
+          "displayName": "Debug Logging",
+          "displayOrder": 4,
+          "displayHint": "Enable for debug logs"
+        }
+      ]
+    }
+  }

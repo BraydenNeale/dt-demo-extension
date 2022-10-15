@@ -1,0 +1,15 @@
+name: custom.extension.demo.file.stats
+version: 0.0.1
+minDynatraceVersion: "1.245"
+author:
+  name: Brayden
+
+# dashboards
+
+# alerts
+
+# metrics
+
+# datasource
+
+# topology

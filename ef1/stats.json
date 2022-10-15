@@ -1,0 +1,29 @@
+{
+    "serverId": "hostname1",
+    "cpu": "45",
+    "temperature": "60",
+    "totalMem": "16384000000",
+    "memUsed": "13926400000",
+    "disks": [
+        {
+            "drive": "C",
+            "totalDisk": "16384000000",
+            "DiskUsed": "13926400000"
+        },
+        {
+            "drive": "D",
+            "totalDisk": "16384000000",
+            "DiskUsed": "13926400000"
+        }
+    ],
+    "processes": [
+        {
+            "name": "gateway",
+            "status": "active"
+        },
+        {
+            "name": "database",
+            "status": "down"
+        }
+    ]
+}
