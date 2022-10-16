@@ -2,7 +2,7 @@
     "id": "118c4634-6532-44f5-ab64-filestats001",
     "metricSelector": "demo.file.stats.process.status:splitBy(process.name):min",
     "name": "Demo File Stats - Process Status Alert",
-    "description": "Process: {dims:server.id} - {dims:process.name} - Problem status reported of: {dims:process.status}",
+    "description": "Process: {dims:process.name} - Problem status reported",
     "severity": "CUSTOM_ALERT",
     "enabled": true,
     "disabledReason": "NONE",
