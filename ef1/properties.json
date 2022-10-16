@@ -1,5 +1,5 @@
 {
-    "file_name": "./stats.json",
+    "file_name": "./ef1/stats.json",
     "group": "test",
     "password": "password",
     "debug": true,
