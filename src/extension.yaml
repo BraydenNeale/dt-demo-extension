@@ -1,12 +1,14 @@
-name: custom.extension.demo.file.stats
-version: 0.0.1
+name: custom:extension.demo.file.stats
+version: 0.0.3
 minDynatraceVersion: "1.245"
 author:
   name: Brayden
 
-# dashboards
+dashboards:
+  - path: dashboards/file_stats_overview.json
 
-# alerts
+alerts:
+  - path: alerts/process_status.json
 
 # METRIC DEFINITONS AND METADATA FOR OUR MINT METRICS:
 # demo.file.stats.cpu,server.id="hostname1",group="test" 45
@@ -25,7 +27,7 @@ metrics:
     unit: Percent
     tags:
     - "Demo"
-    - "file stats server"
+    - "file-stats-server"
     - "extension"
 - key: demo.file.stats.temperature
   metadata:
@@ -34,7 +36,7 @@ metrics:
     unit: Count
     tags:
     - "Demo"
-    - "file stats server"
+    - "file-stats-server"
     - "extension"
 - key: demo.file.stats.memory
   metadata:
@@ -43,7 +45,7 @@ metrics:
     unit: Percent
     tags:
     - "Demo"
-    - "file stats server"
+    - "file-stats-server"
     - "extension"
 # DISK
 - key: demo.file.stats.disk.used
@@ -53,7 +55,7 @@ metrics:
     unit: Percent
     tags:
     - "Demo"
-    - "file stats disk"
+    - "file-stats-disk"
     - "extension"
 # PROCESS
 - key: demo.file.stats.process.status
@@ -63,7 +65,7 @@ metrics:
     unit: Count
     tags:
     - "Demo"
-    - "file stats process"
+    - "file-stats-process"
     - "extension"
 
 # datasource
@@ -122,6 +124,9 @@ topology:
         - key: process_name
           pattern: '{process.name}'
           displayName: Process Name
+        - key: host_id
+          pattern: '{dt.entity.host}'
+          displayName: Dynatrace Host ID
   # CUSTOM TOPOOLOGY RELATIONSHIPS
   # WRAPS: Settings -> Topology model -> Generic Types
   # Possible relationship mapping types include CALLS, CHILD_OF, INSTANCE_OF, PART_OF, SAME_AS and RUNS_ON.
@@ -152,7 +157,7 @@ topology:
       mappingRules:
         - sourceProperty: dt.entity.host
           sourceTransformation: To lower case
-          destinationProperty: dt.entity.host
+          destinationProperty: host_id
           destinationTransformation: To lower case
 
 # Build and define custom Unified analysis screens
@@ -215,7 +220,7 @@ screens:
       enableDetailsExpandability: false
       numberOfVisibleCharts: 3
       displayIcons: true
-      entitySelectorTemplate: type(demo.file.stats.process),fromRelationship.runsOn($(entityConditions))
+      entitySelectorTemplate: type(python:custom_file_stat_process),fromRelationship.runsOn($(entityConditions))
     chartsCards:
     - key: server_charts
       displayName: Reporting Server Metrics

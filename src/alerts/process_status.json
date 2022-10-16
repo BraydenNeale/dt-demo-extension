@@ -1,0 +1,28 @@
+{
+    "id": "118c4634-6532-44f5-ab64-filestats001",
+    "metricSelector": "demo.file.stats.process.status:splitBy(process.name):min",
+    "name": "Demo File Stats - Process Status Alert",
+    "description": "Process: {dims:server.id} - {dims:process.name} - Problem status reported of: {dims:process.status}",
+    "severity": "CUSTOM_ALERT",
+    "enabled": true,
+    "disabledReason": "NONE",
+    "warningReason": "NONE",
+    "monitoringStrategy": {
+        "type": "STATIC_THRESHOLD",
+        "samples": 3,
+        "violatingSamples": 1,
+        "dealertingSamples": 3,
+        "alertCondition": "BELOW",
+        "alertingOnMissingData": false,
+        "threshold": 1,
+        "unit": "COUNT"
+    },
+    "primaryDimensionKey": "dt.entity.python:custom_file_stat_process",
+    "alertCondition": "BELOW",
+    "samples": 3,
+    "violatingSamples": 1,
+    "dealertingSamples": 3,
+    "threshold": 1,
+    "unit": "COUNT",
+    "eventType": "CUSTOM_ALERT"
+}
