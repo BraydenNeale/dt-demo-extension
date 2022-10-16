@@ -5,6 +5,8 @@
 * Extension Framework 1 (EF1) docs: https://www.dynatrace.com/support/help/shortlink/extensions-hub
 * Extension Framework 2 (EF2) docs: https://www.dynatrace.com/support/help/shortlink/extensions20
 * A good guide for EF2 extensions (SNMP) is available at: https://github.com/arunkrishnan-dt/dynatrace_snmp_2.0
+* Unified analysis screens intro: https://www.youtube.com/watch?v=tIIVaC9iWPM
+* Dynatrace extensions 2.0 framework: https://www.youtube.com/watch?v=2P9hV3jbq9s 
 
 # EF1 - Python3.8
 * `py -3.8 -m venv .venv`
@@ -47,5 +49,5 @@
 * `dt extension validate --tenant-url $Env:DT_TENANT --api-token $Env:DTCLI_API_TOKEN dist/bundle.zip`
 * Manually upload to the UI
     * or (note: known issue for first build): `dt extension upload --tenant-url $Env:DT_TENANT --api-token $Env:DTCLI_API_TOKEN dist/bundle.zip`
-* Configure your extenson from the extension UI under: Infrastruture -> Extensions -> Managed and upload
+* Configure your extenson from the extension UI under: Infrastruture -> Extensions -> Manage and upload
 
