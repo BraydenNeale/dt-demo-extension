@@ -7,6 +7,8 @@
 * A good guide for EF2 extensions (SNMP) is available at: https://github.com/arunkrishnan-dt/dynatrace_snmp_2.0
 * Unified analysis screens intro: https://www.youtube.com/watch?v=tIIVaC9iWPM
 * Dynatrace extensions 2.0 framework: https://www.youtube.com/watch?v=2P9hV3jbq9s 
+* Dynatrace HUB - Available extensions and supported technologies: https://www.dynatrace.com/hub/
+* Open Source Dynatrace Extensions: https://github.com/orgs/dynatrace-extensions/repositories
 
 # EF1 - Python3.8
 * `py -3.8 -m venv .venv`
