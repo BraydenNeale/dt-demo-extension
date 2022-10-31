@@ -2,6 +2,8 @@
 * Enable EEC for the OneAgents (globally or per host): https://www.dynatrace.com/support/help/shortlink/extensions-concepts#eec
 * Generate an API token from your Dynatrace tenant: Managed -> Access Tokens
     * API v2 scopes: Ingest metrics, Read settings, Write settings
+
+## Useful resources
 * Extension Framework 1 (EF1) docs: https://www.dynatrace.com/support/help/shortlink/extensions-hub
 * Extension Framework 2 (EF2) docs: https://www.dynatrace.com/support/help/shortlink/extensions20
 * A good guide for EF2 extensions (SNMP) is available at: https://github.com/arunkrishnan-dt/dynatrace_snmp_2.0
@@ -9,6 +11,7 @@
 * Dynatrace extensions 2.0 framework: https://www.youtube.com/watch?v=2P9hV3jbq9s 
 * Dynatrace HUB - Available extensions and supported technologies: https://www.dynatrace.com/hub/
 * Open Source Dynatrace Extensions: https://github.com/orgs/dynatrace-extensions/repositories
+* Dynatrace vscode plugin - copilot: https://github.com/dynatrace-extensions/dynatrace-extensions-copilot: 
 
 # EF1 - Python3.8
 * `py -3.8 -m venv .venv`
